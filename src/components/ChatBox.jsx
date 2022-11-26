@@ -7,7 +7,7 @@ import {
 	updateDoc,
 } from 'firebase/firestore'
 import { Send } from '@mui/icons-material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase'
 import { useChatContext } from '../context/ChatContext'
 import { useUserContext } from '../context/UserContext'
@@ -51,7 +51,7 @@ const ChatBox = () => {
 		const unsub = onSnapshot(doc(db, 'chats', combinedId), (snapshot) => {
 			setMessages(snapshot.data().messages)
 		})
-		return () => unsub()
+		return unsub
 	}, [])
 
 	return (
@@ -80,6 +80,7 @@ const ChatBox = () => {
 							isCurrentUserSender={isCurrentUserSender}
 							photoURL={photoURL}
 							text={msg.text}
+							key={msg.id}
 						/>
 					)
 				})}

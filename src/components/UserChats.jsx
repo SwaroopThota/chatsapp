@@ -11,7 +11,7 @@ const UserChats = () => {
 		data: { user: currentUser },
 	} = useUserContext()
 	const { dispatch } = useChatContext()
-	const [chatList, setChatList] = useState([])
+	const [chatList, setChatList] = useState(null)
 
 	const handleClick = (otherUser) => {
 		const combinedId =
@@ -27,10 +27,11 @@ const UserChats = () => {
 		const unsub = onSnapshot(
 			doc(db, 'userChats', currentUser.uid),
 			(snapshot) => {
-				setChatList(Object.entries(snapshot.data()))
+				if (snapshot.exists())
+					setChatList(Object.entries(snapshot.data()))
 			}
 		)
-		return () => unsub
+		return unsub
 	}, [])
 	return (
 		<>

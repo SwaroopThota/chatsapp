@@ -9,6 +9,7 @@ import {
 	query,
 	serverTimestamp,
 	setDoc,
+	updateDoc,
 	where,
 } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
@@ -32,14 +33,14 @@ const Users = () => {
 		let querySnapshot = await getDoc(doc(db, 'chats', combinedId))
 		if (!querySnapshot.exists()) {
 			await setDoc(doc(db, 'chats', combinedId), { messages: [] })
-			await setDoc(doc(db, 'userChats', currentUser.uid), {
+			await updateDoc(doc(db, 'userChats', currentUser.uid), {
 				[combinedId]: {
 					otherUser: otherUser,
 					date: serverTimestamp(),
 					lastMessage: '',
 				},
 			})
-			await setDoc(doc(db, 'userChats', otherUser.uid), {
+			await updateDoc(doc(db, 'userChats', otherUser.uid), {
 				[combinedId]: {
 					otherUser: currentUser,
 					date: serverTimestamp(),
@@ -63,7 +64,7 @@ const Users = () => {
 			querySnapshot.forEach((doc) => newUsersList.push(doc.data()))
 			setUsersList(newUsersList)
 		})
-		return () => unsub
+		return unsub
 	}, [])
 
 	return (

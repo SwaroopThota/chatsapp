@@ -9,7 +9,7 @@ const Message = ({ text, photoURL, isCurrentUserSender }) => {
 		ref.current.scrollIntoView({
 			behaviour: 'smooth',
 		})
-	}, [])
+	}, [text])
 	return (
 		<Stack
 			alignItems='center'

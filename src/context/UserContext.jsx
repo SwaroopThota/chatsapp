@@ -41,6 +41,7 @@ export const UserProvider = ({ children }) => {
 		const querySnapshot = await getDoc(doc(db, 'users', user.uid))
 		if (!querySnapshot.exists()) {
 			await setDoc(doc(db, 'users', user.uid), user)
+			await setDoc(doc(db, 'userChats', user.uid), {})
 		}
 	}
 	const [user, loading, error] = useAuthState(auth)
