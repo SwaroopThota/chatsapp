@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Divider, Stack, Typography } from '@mui/material'
 import { doc, onSnapshot } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase'
@@ -34,11 +34,12 @@ const UserChats = () => {
 		return unsub
 	}, [])
 	return (
-		<>
-			<Typography variant='h5'>Recent Chats</Typography>
-			<Stack gap={2} height='36vh' overflow='auto'>
-				{chatList &&
-					chatList.map((chat) => (
+		chatList && (
+			<Box height='50%'>
+				<Typography variant='h5'>Recent Chats</Typography>
+				<Divider sx={{ m: 2 }} />
+				<Stack gap={2} height='80%' overflow='auto'>
+					{chatList.map((chat) => (
 						<Stack
 							key={chat[0]}
 							gap='1rem'
@@ -61,8 +62,9 @@ const UserChats = () => {
 							</div>
 						</Stack>
 					))}
-			</Stack>
-		</>
+				</Stack>
+			</Box>
+		)
 	)
 }
 

@@ -1,23 +1,20 @@
 import { Avatar, Typography } from '@mui/material'
 import React from 'react'
+import ProfileImg from './ProfileImg'
 
 const AppLogo = () => {
-  return (
+	return (
 		<Typography
 			variant='h4'
 			display='flex'
 			alignItems='center'
 			gap={1}
-			my={2}
+			py={2}
 		>
-			<Avatar
-				alt='logo'
-				src='/assets/images/icon.png'
-				sx={{ width: 56, height: 56 }}
-			/>
+			<ProfileImg photoURL='/assets/images/icon.png' />
 			ChatsApp
 		</Typography>
-  )
+	)
 }
 
 export default AppLogo

@@ -1,5 +1,5 @@
 import { Send } from '@mui/icons-material'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Divider, IconButton, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import {
 	collection,
@@ -68,9 +68,10 @@ const Users = () => {
 	}, [])
 
 	return (
-		<>
+		<Box height='50%'>
 			<Typography variant='h5'>Users</Typography>
-			<Stack gap={2} height='36vh' overflow='auto'>
+			<Divider sx={{ m: 2 }} />
+			<Stack gap={2} height='80%' overflow='auto'>
 				{usersList.map((user) => (
 					<Stack
 						key={user.uid}
@@ -86,19 +87,19 @@ const Users = () => {
 							</Typography>
 						</div>
 						<Box ml='auto'>
-							<Button
+							<IconButton
 								variant='outlined'
-								color='info'
+								size='large'
+								color='primary'
 								onClick={() => handleClick(user)}
-								startIcon={<Send />}
 							>
-								Message
-							</Button>
+								<Send fontSize='inherit' />
+							</IconButton>
 						</Box>
 					</Stack>
 				))}
 			</Stack>
-		</>
+		</Box>
 	)
 }
 

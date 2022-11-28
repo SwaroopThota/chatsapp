@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mui/material'
 import { signOut } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { createContext, useContext, useEffect, useReducer } from 'react'
@@ -25,6 +26,9 @@ const userReducer = (state, action) => {
 			signOut(auth)
 			return { ...state, user: null }
 		}
+		case 'toggleDarkMode': {
+			return { ...state, darkMode: !state.darkMode }
+		}
 		default: {
 			throw new Error(`Unhandled action type: ${action.type}`)
 		}
@@ -32,10 +36,12 @@ const userReducer = (state, action) => {
 }
 
 export const UserProvider = ({ children }) => {
+	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
 	const [state, dispatch] = useReducer(userReducer, {
 		user: null,
 		loading: true,
 		error: null,
+		darkMode: prefersDarkMode,
 	})
 	const addUserToDB = async (user) => {
 		const querySnapshot = await getDoc(doc(db, 'users', user.uid))

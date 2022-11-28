@@ -8,6 +8,12 @@ const chatReducer = (state, action) => {
 		case 'changeUser': {
 			return payload
 		}
+		case 'removeUser': {
+			return {
+				combinedId: null,
+				otherUser: null,
+			}
+		}
 		default: {
 			console.error('Action type Not found')
 			return state

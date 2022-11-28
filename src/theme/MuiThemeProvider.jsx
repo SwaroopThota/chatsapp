@@ -1,14 +1,17 @@
 import { ThemeProvider } from '@emotion/react'
-import { createTheme, CssBaseline, useMediaQuery } from '@mui/material'
-import React from 'react'
+import { createTheme, CssBaseline, responsiveFontSizes } from '@mui/material'
+import { useUserContext } from '../context/UserContext'
 
 const MuiThemeProvider = ({ children }) => {
-	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-	const theme = createTheme({
+	const {
+		data: { darkMode },
+	} = useUserContext()
+	let theme = createTheme({
 		palette: {
-			mode: prefersDarkMode ? 'dark' : 'light',
+			mode: darkMode ? 'dark' : 'light',
 		},
 	})
+	theme = responsiveFontSizes(theme)
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />

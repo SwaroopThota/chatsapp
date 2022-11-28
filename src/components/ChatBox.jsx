@@ -6,16 +6,15 @@ import {
 	Timestamp,
 	updateDoc,
 } from 'firebase/firestore'
-import { Send } from '@mui/icons-material'
 import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase'
 import { useChatContext } from '../context/ChatContext'
 import { useUserContext } from '../context/UserContext'
 import { v4 } from 'uuid'
-import { IconButton, Stack, TextField, Typography } from '@mui/material'
+import { Grid, Paper, Stack, Typography } from '@mui/material'
 import ProfileImg from './ProfileImg'
-import { Box } from '@mui/system'
 import Message from './Message'
+import MessageInput from './MessageInput'
 
 const ChatBox = () => {
 	const {
@@ -55,59 +54,41 @@ const ChatBox = () => {
 	}, [])
 
 	return (
-		<Box sx={{ height: '100vh', px: '2rem' }}>
-			<Stack gap={'1rem'} direction={'row'}>
-				<ProfileImg photoURL={otherUser.photoURL} />
-				<div>
-					<Typography variant='h6'>{otherUser.name}</Typography>
-					<Typography variant='body2' color='grey'>
-						{otherUser.email}
-					</Typography>
-				</div>
-			</Stack>
-			<Stack
-				gap='1rem'
-				my='1rem'
-				sx={{ height: '75%', overflowY: 'auto' }}
-			>
-				{messages.map((msg) => {
-					let isCurrentUserSender = msg.senderId === currentUser.uid
-					const photoURL = isCurrentUserSender
-						? currentUser.photoURL
-						: otherUser.photoURL
-					return (
-						<Message
-							isCurrentUserSender={isCurrentUserSender}
-							photoURL={photoURL}
-							text={msg.text}
-							key={msg.id}
-						/>
-					)
-				})}
-			</Stack>
-			<Stack direction='row'>
-				<TextField
-					id='message'
-					label='Type Something...'
-					name='message'
-					variant='outlined'
-					value={text}
-					onChange={(e) => setText(e.target.value)}
-					onKeyDown={(e) => {
-						if (e.key === 'Enter') handleSend()
-					}}
-					fullWidth
-					autoComplete='off'
+		<Grid item lg={8} md={6} xs={12} height='100%'>
+			<Paper sx={{ height: '100%', p: 1, borderRadius: 3 }}>
+				<Stack gap={'1rem'} direction={'row'}>
+					<ProfileImg photoURL={otherUser.photoURL} />
+					<div>
+						<Typography variant='h6'>{otherUser.name}</Typography>
+						<Typography variant='body2' color='grey'>
+							{otherUser.email}
+						</Typography>
+					</div>
+				</Stack>
+				<Stack gap='1rem' my='1rem' height='75%' overflow='auto'>
+					{messages.map((msg) => {
+						let isCurrentUserSender =
+							msg.senderId === currentUser.uid
+						const photoURL = isCurrentUserSender
+							? currentUser.photoURL
+							: otherUser.photoURL
+						return (
+							<Message
+								isCurrentUserSender={isCurrentUserSender}
+								photoURL={photoURL}
+								text={msg.text}
+								key={msg.id}
+							/>
+						)
+					})}
+				</Stack>
+				<MessageInput
+					text={text}
+					setText={setText}
+					handleSend={handleSend}
 				/>
-				<IconButton
-					aria-label='delete'
-					size='large'
-					onClick={handleSend}
-				>
-					<Send fontSize='inherit' color='primary' />
-				</IconButton>
-			</Stack>
-		</Box>
+			</Paper>
+		</Grid>
 	)
 }
 

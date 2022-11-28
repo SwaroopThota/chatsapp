@@ -1,16 +1,17 @@
-import { Avatar, Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { useUserContext } from '../context/UserContext'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ProfileImg from './ProfileImg'
+import { useChatContext } from '../context/ChatContext'
 
-const UserInfo = () => {
-	const {
-		data: { user },
-		dispatch,
-	} = useUserContext()
+const UserInfo = ({ user, dispatch }) => {
+	const { dispatch: chatDispatch } = useChatContext()
+	const handleSignOut = () => {
+		dispatch({ type: 'signOutUser' })
+		chatDispatch({ type: 'removeUser' })
+	}
 	return (
-		<Stack gap={2} direction='row'>
+		<Stack gap={2} direction='row' alignItems='center'>
 			<ProfileImg photoURL={user.photoURL} />
 			<div>
 				<Typography variant='body1'>{user.name}</Typography>
@@ -18,7 +19,7 @@ const UserInfo = () => {
 					variant='outlined'
 					color='error'
 					size='small'
-					onClick={() => dispatch({ type: 'signOutUser' })}
+					onClick={handleSignOut}
 					startIcon={<LogoutIcon />}
 				>
 					logout

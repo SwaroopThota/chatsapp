@@ -9,16 +9,10 @@ const Home = () => {
 		data: { otherUser },
 	} = useChatContext()
 	return (
-		<>
-			<Grid container height='100vh'>
-				<Grid item lg={4} md={6} xs={12}>
-					<Sidebar />
-				</Grid>
-				<Grid item lg={8} md={6} xs={12}>
-					{otherUser && <ChatBox />}
-				</Grid>
-			</Grid>
-		</>
+		<Grid container spacing={2} height='85%'>
+			<Sidebar />
+			{otherUser && <ChatBox />}
+		</Grid>
 	)
 }
 

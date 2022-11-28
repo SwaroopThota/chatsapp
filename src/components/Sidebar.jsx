@@ -1,26 +1,15 @@
-import { Stack } from '@mui/material'
+import { Grid, Paper } from '@mui/material'
 import UserChats from './UserChats'
 import Users from './Users'
-import UserInfo from '../components/UserInfo'
-import AppLogo from '../components/AppLogo'
 
 const Sidebar = () => {
 	return (
-		<>
-			<Stack
-				direction='row'
-				justifyContent='space-between'
-				alignItems='center'
-				pr='1rem'
-			>
-				<AppLogo />
-				<UserInfo />
-			</Stack>
-			<Stack gap={2}>
+		<Grid item lg={4} md={6} xs={12} height='100%'>
+			<Paper sx={{ height: '100%', p: 1, borderRadius: 3 }} elevation={2}>
 				<Users />
 				<UserChats />
-			</Stack>
-		</>
+			</Paper>
+		</Grid>
 	)
 }
 
