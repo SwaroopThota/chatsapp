@@ -51,7 +51,7 @@ const ChatBox = () => {
 			setMessages(snapshot.data().messages)
 		})
 		return unsub
-	}, [])
+	}, [combinedId])
 
 	return (
 		<Grid item lg={8} md={6} xs={12} height='100%'>
