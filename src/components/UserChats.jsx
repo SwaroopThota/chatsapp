@@ -14,21 +14,25 @@ const UserChats = () => {
 	const [chatList, setChatList] = useState(null)
 
 	const handleClick = (otherUser) => {
-		const combinedId =
+		const chatId =
 			currentUser.uid > otherUser.uid
 				? currentUser.uid + otherUser.uid
 				: otherUser.uid + currentUser.uid
 		dispatch({
-			type: 'changeUser',
-			payload: { combinedId: combinedId, otherUser: otherUser },
+			type: 'change_user',
+			payload: { chatId, otherUser },
 		})
 	}
 	useEffect(() => {
 		const unsub = onSnapshot(
 			doc(db, 'userChats', currentUser.uid),
 			(snapshot) => {
-				if (snapshot.exists())
-					setChatList(Object.entries(snapshot.data()))
+				if (snapshot.exists()) {
+					let arr = Object.entries(snapshot.data()).sort(
+						(a, b) => b[1].date - a[1].date
+					)
+					setChatList(arr)
+				}
 			}
 		)
 		return unsub
@@ -37,8 +41,8 @@ const UserChats = () => {
 		chatList && (
 			<Box height='50%'>
 				<Typography variant='h5'>Recent Chats</Typography>
-				<Divider sx={{ m: 2 }} />
-				<Stack gap={2} height='80%' overflow='auto'>
+				<Divider sx={{ my: 2 }} />
+				<Stack gap={2} height='75%' overflow='auto'>
 					{chatList.map((chat) => (
 						<Stack
 							key={chat[0]}

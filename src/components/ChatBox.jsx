@@ -18,7 +18,7 @@ import MessageInput from './MessageInput'
 
 const ChatBox = () => {
 	const {
-		data: { otherUser, combinedId },
+		data: { otherUser, chatId },
 	} = useChatContext()
 	const {
 		data: { user: currentUser },
@@ -29,7 +29,7 @@ const ChatBox = () => {
 		const t = text
 		setText('')
 		if (t.trim().length == 0) return
-		await updateDoc(doc(db, 'chats', combinedId), {
+		await updateDoc(doc(db, 'chats', chatId), {
 			messages: arrayUnion({
 				id: v4(),
 				senderId: currentUser.uid,
@@ -38,20 +38,20 @@ const ChatBox = () => {
 			}),
 		})
 		await updateDoc(doc(db, 'userChats', currentUser.uid), {
-			[combinedId + '.lastMessage']: t,
-			[combinedId + '.date']: serverTimestamp(),
+			[chatId + '.lastMessage']: t,
+			[chatId + '.date']: serverTimestamp(),
 		})
 		await updateDoc(doc(db, 'userChats', otherUser.uid), {
-			[combinedId + '.lastMessage']: t,
-			[combinedId + '.date']: serverTimestamp(),
+			[chatId + '.lastMessage']: t,
+			[chatId + '.date']: serverTimestamp(),
 		})
 	}
 	useEffect(() => {
-		const unsub = onSnapshot(doc(db, 'chats', combinedId), (snapshot) => {
+		const unsub = onSnapshot(doc(db, 'chats', chatId), (snapshot) => {
 			setMessages(snapshot.data().messages)
 		})
 		return unsub
-	}, [combinedId])
+	}, [chatId])
 
 	return (
 		<Grid item lg={8} md={6} xs={12} height='100%'>

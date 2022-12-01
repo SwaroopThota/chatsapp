@@ -10,6 +10,7 @@ const Navbar = ({ user, dispatch, darkMode }) => {
 			direction='row'
 			justifyContent='space-between'
 			alignItems='center'
+			py={2}
 		>
 			<AppLogo />
 			<Stack direction='row' alignItems={'center'}>

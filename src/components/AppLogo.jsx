@@ -9,7 +9,6 @@ const AppLogo = () => {
 			display='flex'
 			alignItems='center'
 			gap={1}
-			py={2}
 		>
 			<ProfileImg photoURL='/assets/images/icon.png' />
 			ChatsApp

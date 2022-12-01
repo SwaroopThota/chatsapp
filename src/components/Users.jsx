@@ -26,22 +26,22 @@ const Users = () => {
 	const [usersList, setUsersList] = useState([])
 
 	const handleClick = async (otherUser) => {
-		const combinedId =
+		const chatId =
 			currentUser.uid > otherUser.uid
 				? currentUser.uid + otherUser.uid
 				: otherUser.uid + currentUser.uid
-		let querySnapshot = await getDoc(doc(db, 'chats', combinedId))
+		let querySnapshot = await getDoc(doc(db, 'chats', chatId))
 		if (!querySnapshot.exists()) {
-			await setDoc(doc(db, 'chats', combinedId), { messages: [] })
+			await setDoc(doc(db, 'chats', chatId), { messages: [] })
 			await updateDoc(doc(db, 'userChats', currentUser.uid), {
-				[combinedId]: {
+				[chatId]: {
 					otherUser: otherUser,
 					date: serverTimestamp(),
 					lastMessage: '',
 				},
 			})
 			await updateDoc(doc(db, 'userChats', otherUser.uid), {
-				[combinedId]: {
+				[chatId]: {
 					otherUser: currentUser,
 					date: serverTimestamp(),
 					lastMessage: '',
@@ -49,8 +49,8 @@ const Users = () => {
 			})
 		}
 		dispatch({
-			type: 'changeUser',
-			payload: { combinedId: combinedId, otherUser: otherUser },
+			type: 'change_user',
+			payload: { chatId, otherUser: otherUser },
 		})
 	}
 
@@ -70,8 +70,8 @@ const Users = () => {
 	return (
 		<Box height='50%'>
 			<Typography variant='h5'>Users</Typography>
-			<Divider sx={{ m: 2 }} />
-			<Stack gap={2} height='80%' overflow='auto'>
+			<Divider sx={{ my: 2 }} />
+			<Stack gap={2} height='75%' overflow='auto'>
 				{usersList.map((user) => (
 					<Stack
 						key={user.uid}

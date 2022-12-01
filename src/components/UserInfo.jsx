@@ -7,8 +7,8 @@ import { useChatContext } from '../context/ChatContext'
 const UserInfo = ({ user, dispatch }) => {
 	const { dispatch: chatDispatch } = useChatContext()
 	const handleSignOut = () => {
+		chatDispatch({ type: 'remove_user' })
 		dispatch({ type: 'signOutUser' })
-		chatDispatch({ type: 'removeUser' })
 	}
 	return (
 		<Stack gap={2} direction='row' alignItems='center'>
