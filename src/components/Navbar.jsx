@@ -1,10 +1,19 @@
 import { NightsStay, WbSunny } from '@mui/icons-material'
-import { Stack, Switch } from '@mui/material'
+import {
+	Button,
+	IconButton,
+	Paper,
+	Stack,
+	Switch,
+	Typography,
+} from '@mui/material'
 import React from 'react'
+import LogoutIcon from '@mui/icons-material/Logout'
 import AppLogo from './AppLogo'
-import UserInfo from './UserInfo'
+import ProfileImg from './ProfileImg'
+import useIsMobile from './hooks/useIsMobile'
 
-const Navbar = ({ user, dispatch, darkMode }) => {
+const Navbar = ({ user, dispatch }) => {
 	return (
 		<Stack
 			direction='row'
@@ -13,17 +22,47 @@ const Navbar = ({ user, dispatch, darkMode }) => {
 			py={2}
 		>
 			<AppLogo />
-			<Stack direction='row' alignItems={'center'}>
-				<Switch
-					checked={darkMode}
-					size='large'
-					onChange={() => dispatch({ type: 'toggleDarkMode' })}
-					checkedIcon={<NightsStay />}
-					icon={<WbSunny color='warning' />}
-				/>
-				{user && <UserInfo user={user} dispatch={dispatch} />}
-			</Stack>
+			{user && <UserInfo user={user} dispatch={dispatch} />}
 		</Stack>
+	)
+}
+
+const UserInfo = ({ user, dispatch }) => {
+	const isMobile = useIsMobile()
+	const handleSignOut = () => {
+		dispatch({ type: 'signOutUser' })
+	}
+	return (
+		<Paper elevation={2} sx={{ p: 1, borderRadius: 4 }}>
+			<Stack gap={1} direction='row' alignItems='center'>
+				<ProfileImg photoURL={user.photoURL} />
+				<div>
+					{!isMobile && (
+						<Typography
+							variant='body1'
+							textTransform={'capitalize'}
+						>
+							{user.name.split(' ')[0].toLowerCase()}
+						</Typography>
+					)}
+					{isMobile ? (
+						<IconButton onClick={handleSignOut} color='error'>
+							<LogoutIcon />
+						</IconButton>
+					) : (
+						<Button
+							variant='outlined'
+							color='error'
+							size='small'
+							onClick={handleSignOut}
+							startIcon={<LogoutIcon />}
+						>
+							Logout
+						</Button>
+					)}
+				</div>
+			</Stack>
+		</Paper>
 	)
 }
 

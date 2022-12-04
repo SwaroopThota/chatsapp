@@ -19,6 +19,7 @@ import MessageInput from './MessageInput'
 const ChatBox = () => {
 	const {
 		data: { otherUser, chatId },
+		dispatch: chatDispatch,
 	} = useChatContext()
 	const {
 		data: { user: currentUser },
@@ -46,40 +47,48 @@ const ChatBox = () => {
 			[chatId + '.date']: serverTimestamp(),
 		})
 	}
+	const getMsgProps = (msg) => {
+		let isCurrentUserSender = msg.senderId === currentUser.uid
+		const photoURL = isCurrentUserSender
+			? currentUser.photoURL
+			: otherUser.photoURL
+		return {
+			isCurrentUserSender,
+			photoURL,
+			text: msg.text,
+			key: msg.id,
+		}
+	}
 	useEffect(() => {
+		if (!chatId) return
 		const unsub = onSnapshot(doc(db, 'chats', chatId), (snapshot) => {
 			setMessages(snapshot.data().messages)
 		})
 		return unsub
 	}, [chatId])
 
-	return (
+	useEffect(() => chatDispatch({ type: 'remove_chat' }), [])
+
+	return chatId ? (
 		<Grid item lg={8} md={6} xs={12} height='100%'>
 			<Paper sx={{ height: '100%', p: 1, borderRadius: 3 }}>
 				<Stack gap={'1rem'} direction={'row'}>
 					<ProfileImg photoURL={otherUser.photoURL} />
 					<div>
-						<Typography variant='h6'>{otherUser.name}</Typography>
+						<Typography
+							variant='body1'
+							textTransform={'capitalize'}
+						>
+							{otherUser.name.toLowerCase()}
+						</Typography>
 						<Typography variant='body2' color='grey'>
-							{otherUser.email}
+							@{otherUser.email.split('@')[0]}
 						</Typography>
 					</div>
 				</Stack>
 				<Stack gap='1rem' my='1rem' height='75%' overflow='auto'>
 					{messages.map((msg) => {
-						let isCurrentUserSender =
-							msg.senderId === currentUser.uid
-						const photoURL = isCurrentUserSender
-							? currentUser.photoURL
-							: otherUser.photoURL
-						return (
-							<Message
-								isCurrentUserSender={isCurrentUserSender}
-								photoURL={photoURL}
-								text={msg.text}
-								key={msg.id}
-							/>
-						)
+						return <Message {...getMsgProps(msg)} />
 					})}
 				</Stack>
 				<MessageInput
@@ -89,6 +98,8 @@ const ChatBox = () => {
 				/>
 			</Paper>
 		</Grid>
+	) : (
+		<></>
 	)
 }
 

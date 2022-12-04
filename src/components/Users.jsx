@@ -1,5 +1,5 @@
 import { Send } from '@mui/icons-material'
-import { Button, Divider, IconButton, Stack, Typography } from '@mui/material'
+import { Divider, IconButton, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import {
 	collection,
@@ -49,7 +49,7 @@ const Users = () => {
 			})
 		}
 		dispatch({
-			type: 'change_user',
+			type: 'change_chat',
 			payload: { chatId, otherUser: otherUser },
 		})
 	}
@@ -73,30 +73,11 @@ const Users = () => {
 			<Divider sx={{ my: 2 }} />
 			<Stack gap={2} height='75%' overflow='auto'>
 				{usersList.map((user) => (
-					<Stack
+					<User
+						handleClick={handleClick}
+						user={user}
 						key={user.uid}
-						gap={2}
-						direction='row'
-						alignItems='center'
-					>
-						<ProfileImg photoURL={user.photoURL} />
-						<div>
-							<Typography variant='body1'>{user.name}</Typography>
-							<Typography variant='body2' color='grey'>
-								{user.email}
-							</Typography>
-						</div>
-						<Box ml='auto'>
-							<IconButton
-								variant='outlined'
-								size='large'
-								color='primary'
-								onClick={() => handleClick(user)}
-							>
-								<Send fontSize='inherit' />
-							</IconButton>
-						</Box>
-					</Stack>
+					/>
 				))}
 			</Stack>
 		</Box>
@@ -104,3 +85,29 @@ const Users = () => {
 }
 
 export default Users
+
+function User({ handleClick, user }) {
+	return (
+		<Stack gap={2} direction='row' alignItems='center'>
+			<ProfileImg photoURL={user.photoURL} />
+			<div>
+				<Typography variant='body1' textTransform={'capitalize'}>
+					{user.name.toLowerCase()}
+				</Typography>
+				<Typography variant='body2' color='grey'>
+					@{user.email.split('@')[0]}
+				</Typography>
+			</div>
+			<Box ml='auto'>
+				<IconButton
+					variant='outlined'
+					size='large'
+					color='primary'
+					onClick={() => handleClick(user)}
+				>
+					<Send fontSize='inherit' />
+				</IconButton>
+			</Box>
+		</Stack>
+	)
+}

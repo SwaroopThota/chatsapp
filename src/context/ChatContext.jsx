@@ -5,10 +5,10 @@ const ChatContext = createContext()
 const chatReducer = (state, action) => {
 	const { type, payload } = action
 	switch (type) {
-		case 'change_user': {
+		case 'change_chat': {
 			return payload
 		}
-		case 'remove_user': {
+		case 'remove_chat': {
 			return {
 				chatId: null,
 				otherUser: null,
